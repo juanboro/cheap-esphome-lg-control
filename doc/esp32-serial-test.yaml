@@ -1,0 +1,115 @@
+esphome:
+  name: esp32-serial-test
+  friendly_name: ESP32 dev board2
+
+substitutions:
+  linthreshold: 20000 # Adds glitches for anything held low longer than 20ms
+
+# TCP to uart relay --- this is mine, but other custom components do similar as well...
+external_components:
+  - source: github://juanboro/esphome
+    components: [ tcp_server ]
+
+web_server:
+  port: 80
+  version: 3
+
+api:
+#  encryption:
+#    key: !secret api_key
+
+captive_portal:
+
+esp32:  
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+#  level: DEBUG
+#  level: VERBOSE
+#  level: VERY_VERBOSE
+
+wifi:
+  ssid: !secret wifi_name
+  password: !secret wifi_pass
+  fast_connect: true
+
+remote_receiver:
+  - id: uart_watcher
+    pin: { inverted: true, number: 17 , allow_other_uses: true }
+    idle: 120ms
+    clock_resolution: 500000
+    on_raw:
+      then:
+        - remote_transmitter.transmit_raw:
+            id: lin_xmit
+            code: !lambda |-
+              size_t outSize = 0;
+
+              for (int p : x)
+              {
+                  if (p > $linthreshold) {                      
+                      int parts = std::ceil(p / $linthreshold);
+                      outSize += parts + (parts - 1);
+                  } else {
+                      outSize += 1;
+                  }
+              }
+
+              std::vector<long int> out;
+              out.reserve(outSize);
+
+              int frametime=0;
+              for (int p : x)
+              {
+                  int chunkit=p;
+                  while (chunkit>$linthreshold) {
+                    int bitpos=frametime/19230;
+                    // create glitch at the end of every 2nd bit
+                    out.push_back(19228);
+                    out.push_back(-2);
+                    frametime+=19230;
+                    chunkit+=-19230;                  
+                  }
+                  out.push_back(chunkit);
+              }
+
+              return out;            
+
+remote_transmitter:
+  - id: lin_xmit
+    pin: { inverted: true, number: 13 }
+    clock_resolution: 500000
+    non_blocking: true
+    carrier_duty_percent: 100
+
+uart:
+  id: tcp_uart_id
+  # Use UART2
+  tx_pin: { number: 17 , id: lin_tx_pin , allow_other_uses: true}
+  rx_pin: { number: 16 }
+  baud_rate: 104
+
+tcp_server:
+  - id: tcp
+    port: 9000
+    uart_id: tcp_uart_id
+
+    on_connect:
+      then:
+        - logger.log:
+            format: "tcp_server Now Connected to %s"
+            args: ['client_id']
+            level: INFO
+
+binary_sensor:
+  - platform: tcp_server
+    tcp_server_id: tcp
+    connected:
+      name: "TCP Server Connected"
+
+button:  
+  - platform: restart
+    name: "ESP32 dev1 Restart"
