@@ -4,7 +4,7 @@ I obtained a 3.3V UART <-> LIN transceiver from AliExpress on sale for $1.  An i
   
 I believe this can be overcome by introducing small glitches that are enough to keep the LIN transceiver alive, while being small enough to not interfere with the receive side.  I plan to test this fully once I get access to my LG unit at my lake house.  But for now, I put together a proof of concept test setup shown here:  
 ![PastedGraphic.jpg](images/lin_lg_xcvr_proto_poc.jpeg)  
-To create the glitches - I use the ESP32 remote receiver to receive the pulses on the UART output pin (17).  I then add 2us high pulses for any time the UART output is held low more than 20ms and re-transmit using the ESP32 remote transmitter on pin 13.  Pin 13 connects to the UART TX input pin on the LIN transceiver.  The UART output pin (16) is connected directly to the UART RX Pin on the LIN transceiver.  To simulate the LG side of things, I built another transceiver using passive components (more on this to be written later).  
+To create the glitches - I use the ESP32 remote receiver to receive the pulses on the UART output pin (17).  I then add 2us high pulses for any time the UART output is held low more than 20ms and re-transmit using the ESP32 remote transmitter on pin 13.  Pin 13 connects to the UART TX input pin on the LIN transceiver.  The UART output pin (16) is connected directly to the UART RX Pin on the LIN transceiver.  To simulate the LG side of things, I built another transceiver using discrete components (more on this to be written later).  
   
 My ESPHome test setup involves connecting to the UART via TCP via a custom component on each ESP32 and testing the transmit and receive each way.  My basic testing appears to show that this is working.  
   
