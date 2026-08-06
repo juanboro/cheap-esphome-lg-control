@@ -61,16 +61,13 @@ remote_receiver:
               std::vector<long int> out;
               out.reserve(outSize);
 
-              int frametime=0;
               for (int p : x)
               {
                   int chunkit=p;
                   while (chunkit>$linthreshold) {
-                    int bitpos=frametime/19230;
                     // create glitch at the end of every 2nd bit
                     out.push_back(19228);
                     out.push_back(-2);
-                    frametime+=19230;
                     chunkit+=-19230;                  
                   }
                   out.push_back(chunkit);
