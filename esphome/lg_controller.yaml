@@ -1,0 +1,111 @@
+substitutions:
+  uart_id: ac_serial
+  climate_id: lg_control
+  rx_pin: 16
+
+external_components:
+  - source: github://JanM321/esphome-lg-controller@main
+
+climate:
+  - platform: lg_controller
+    id: $climate_id
+    name: "LG control"
+    uart_id: $uart_id
+    rx_pin:
+      number: $rx_pin # Keep in sync with rx_pin above.
+      allow_other_uses: true
+    fahrenheit: false
+    is_slave_controller: false
+    vane1:
+      name: Airflow 1 Up-Down
+      id: vane_position_1
+      icon: mdi:arrow-up-down
+    vane2:
+      name: Airflow 2 Up-Down
+      id: vane_position_2
+      icon: mdi:arrow-up-down
+    vane3:
+      name: Airflow 3 Up-Down
+      id: vane_position_3
+      icon: mdi:arrow-up-down
+    vane4:
+      name: Airflow 4 Up-Down
+      id: vane_position_4
+      icon: mdi:arrow-up-down
+    overheating:
+      name: Over Heating
+      id: overheating
+      icon: mdi:heating-coil
+    fan_speed_slow:
+      name: Fan Speed Slow
+      id: fan_speed_slow
+      icon: mdi:fan-chevron-down
+      mode: box
+    fan_speed_low:
+      name: Fan Speed Low
+      id: fan_speed_low
+      icon: mdi:fan-speed-1
+      mode: box
+    fan_speed_medium:
+      name: Fan Speed Medium
+      id: fan_speed_medium
+      icon: mdi:fan-speed-2
+      mode: box
+    fan_speed_high:
+      name: Fan Speed High
+      id: fan_speed_high
+      icon: mdi:fan-speed-3
+      mode: box
+    sleep_timer:
+      name: "Sleep Timer (minutes)"
+      id: sleep_timer
+      icon: mdi:timer-outline
+      mode: box
+    error_code:
+      name: Error Code
+      id: error_code
+      icon: mdi:alert-circle-outline
+    pipe_temp_in:
+      name: Pipe Temperature In
+      id: pipe_temperature_in
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+    pipe_temp_mid:
+      name: Pipe Temperature Mid
+      id: pipe_temperature_mid
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+    pipe_temp_out:
+      name: Pipe Temperature Out
+      id: pipe_temperature_out
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+    defrost:
+      name: Defrost
+      id: defrost
+      icon: mdi:snowflake-melt
+    preheat:
+      name: Preheat
+      id: preheat
+      icon: mdi:heat-wave
+    outdoor:
+      name: Outdoor Unit
+      id: outdoor
+      icon: mdi:fan
+    auto_dry_active:
+      name: Auto Dry Active
+      id: auto_dry_active
+      icon: mdi:fan-clock
+    purifier:
+      name: Air Purifier
+      id: air_purifier
+      icon: mdi:pine-tree
+    internal_thermistor:
+      name: Internal Thermistor
+      id: internal_thermistor
+      icon: mdi:thermometer
+    auto_dry:
+      name: Auto Dry
+      id: auto_dry
+      icon: mdi:fan-clock
+
