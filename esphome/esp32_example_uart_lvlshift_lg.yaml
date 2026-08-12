@@ -1,0 +1,61 @@
+# This is untested with an actual LG unit - but *should* work - if you try and it doesn't let me know
+esphome:
+  name: example-lvlshift-lg
+  friendly_name: ESP32 Example YAML usage of low-cost levelshifter
+
+# adjust pins as necessary
+substitutions: 
+  tx_pin: 17
+  rx_pin: 16
+
+packages: 
+  lgcontroller:
+    url: https://github.com/juanboro/cheap-esphome-lg-control
+    ref: main
+    files:
+      - path: esphome/lg_controller.yaml
+        vars: { rx_pin: $rx_pin, rx_inverted: true, uart_id: ac_serial }
+
+# you can override defaults here
+climate:
+  - id: !extend lg_control
+    name: "Friendly Name for LG controller"
+
+uart:
+  id: ac_serial
+  tx_pin: { number: $tx_pin , inverted: true }
+  rx_pin: { number: $rx_pin , inverted: true , mode: { input: true, pullup: true} }
+  baud_rate: 104
+
+esp32:  
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+#  level: INFO
+  level: DEBUG
+#  level: VERBOSE
+#  level: VERY_VERBOSE
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+sensor:
+  - platform: uptime
+    type: timestamp
+    name: Last Boot
+
+captive_portal:
+
+api:
+
+ota:
+  platform: esphome
+
+wifi:
+  ssid: !secret wifi_name
+  password: !secret wifi_pass
+  fast_connect: true
+

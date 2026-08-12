@@ -2,6 +2,7 @@ substitutions:
   uart_id: ac_serial
   climate_id: lg_control
   rx_pin: 16
+  rx_inverted: false
 
 external_components:
   - source: github://JanM321/esphome-lg-controller@main
@@ -12,8 +13,9 @@ climate:
     name: "LG control"
     uart_id: $uart_id
     rx_pin:
-      number: $rx_pin # Keep in sync with rx_pin above.
+      number: $rx_pin
       allow_other_uses: true
+      inverted: $rx_inverted
     fahrenheit: false
     is_slave_controller: false
     vane1:
