@@ -1,0 +1,68 @@
+esphome:
+  name: example-lin-xcvr
+  friendly_name: ESP32 Example YAML usage of low-cost lin XCVR to LG unit
+
+# adjust pins as necessary
+substitutions: 
+  uart_tx_pin_in: 17 # unconnected
+  lin_tx_out: 13 # connect to LIN UART TX pin
+  rx_pin: 16 # connect to LIN UART RX pin
+
+packages: 
+  linglitch:
+    url: https://github.com/juanboro/cheap-esphome-lg-control
+    ref: main
+    files:
+      - path: esphome/esp32_uart_lin_glitcher.yaml
+        vars: { uart_tx_pin_in: $uart_tx_pin_in, lin_tx_out: $lin_tx_out } 
+  lgcontroller:
+    url: https://github.com/juanboro/cheap-esphome-lg-control
+    ref: main
+    files:
+      - path: esphome/lg_controller.yaml
+        vars: { rx_pin: $rx_pin, uart_id: ac_serial }
+
+# you can override defaults here
+climate:
+  - id: !extend lg_control
+    name: "Friendly Name for LG controller"
+
+uart:
+  id: ac_serial
+  # Use UART2
+  tx_pin: { number: $uart_tx_pin_in , id: lin_tx_pin , allow_other_uses: true}
+  rx_pin: { number: 16 , id: lin_rx_pin, allow_other_uses: true}
+  baud_rate: 104
+
+esp32:  
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+#  level: INFO
+  level: DEBUG
+#  level: VERBOSE
+#  level: VERY_VERBOSE
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+sensor:
+  - platform: uptime
+    type: timestamp
+    name: Last Boot
+
+captive_portal:
+
+api:
+
+ota:
+  platform: esphome
+
+wifi:
+  ssid: !secret wifi_name
+  password: !secret wifi_pass
+  fast_connect: true
+
