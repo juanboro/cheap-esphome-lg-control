@@ -21,7 +21,12 @@ My basic working example setup before placing in project junction box is picture
 
 
 ## Discrete LG controller level-shift interface
-* No need to LIN transceiver Silicon - can just use 2 Mosfets to handle level shifting.
-* Will add details soon
-
+* A simple interface can be built using a 10k resistor and 2 n-mosfets [2N7000](https://ww1.microchip.com/downloads/en/DeviceDoc/2N7000-N-Channel-Enhancement-Mode-Vertical-DMOS-FET-Data-Sheet-20005695A.pdf) *should* work assuming the Vth of them is <=3.3V.
+* I haven't tested this with my LG unit directly - but have tested it with the LIN-Transceiver as documented [here](doc/Low_baud_linxcvr_workaround.md).
+* To use with ESPHome - you should be able to just customize the following yaml file: [esp32_example_uart_lvlshift_lg.yaml](esphome/esp32_example_uart_lvlshift_lg.yaml)
+* Here is the schematic:
 ![Schematic](doc/images/lg_uart_interface.svg)
+
+Notes:
+* You potentially can use a better mosfet with lower threshold - there are alot of options available although many of them have fairly high drive - so bigger gates with higher gate capacitance - which means you should connect a resistor in series between the gpio and the gate of the fet.
+* Note that the UART RX and TX are inverted from how a TTL UART normally is operated because of the logic level shift from the mosfets.
