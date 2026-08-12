@@ -31,7 +31,7 @@ uart:
   id: ac_serial
   # Use UART2
   tx_pin: { number: $uart_tx_pin_in , id: lin_tx_pin , allow_other_uses: true}
-  rx_pin: { number: 16 , id: lin_rx_pin, allow_other_uses: true}
+  rx_pin: { number: $rx_pin , id: lin_rx_pin, allow_other_uses: true}
   baud_rate: 104
 
 esp32:  
