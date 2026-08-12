@@ -23,3 +23,5 @@ My basic working example setup before placing in project junction box is picture
 ## Discrete LG controller level-shift interface
 * No need to LIN transceiver Silicon - can just use 2 Mosfets to handle level shifting.
 * Will add details soon
+
+![Schematic](doc/images/lg_uart_interface.svg)
