@@ -19,14 +19,18 @@ To make this work with the ESPHome LG controller - just customize the following 
 
 My basic working example setup before placing in project junction box is pictured [here](doc/images/lg_hvac_lin_xcvr_working.jpg)
 
+### Notes
+* To create the glitches on the UART TX line to the LIN transceiver - this uses ESP32 remote_receiver to obtain the signals from the UART, and then it adds the glitches as necessary and retransmits using the remote transmitter.  Because of the very slow bit rate, the pulses are very long - which requires decreasing the clock resolution (divider) used by the remote hardware (and maybe the UART hardware?).  This seems to have un-documented impacts on the timing from the UART - the pulses and timings are still *close* enough - but they definetly are impacted by the clock resolution adjustment.  With the current settings I have in the yaml file - everything seems to work on my ESP32 and *should* work on all other variants - but let me know if it doesn't.
+* A future enhancement I may do would be to just bit-bang the output directly to the GPIO via the interval component and not use the TX UART and remote hardware.  The timing for the interface is so slow it really would not impact any other things running on the board with ESPHome.
 
 ## Discrete LG controller level-shift interface
 * A simple interface can be built using a 10k resistor and 2 n-mosfets [2N7000](https://ww1.microchip.com/downloads/en/DeviceDoc/2N7000-N-Channel-Enhancement-Mode-Vertical-DMOS-FET-Data-Sheet-20005695A.pdf) *should* work assuming the Vth of them is <=3.3V.
 * I haven't tested this with my LG unit directly - but have tested it with the LIN-Transceiver as documented [here](doc/Low_baud_linxcvr_workaround.md).
 * To use with ESPHome - you should be able to just customize the following yaml file: [esp32_example_uart_lvlshift_lg.yaml](esphome/esp32_example_uart_lvlshift_lg.yaml)
 * Here is the schematic:
+
 ![Schematic](doc/images/lg_uart_interface.svg)
 
-Notes:
+### Notes:
 * You potentially can use a better mosfet with lower threshold - there are alot of options available although many of them have fairly high drive - so bigger gates with higher gate capacitance - which means you should connect a resistor in series between the gpio and the gate of the fet.
 * Note that the UART RX and TX are inverted from how a TTL UART normally is operated because of the logic level shift from the mosfets.
