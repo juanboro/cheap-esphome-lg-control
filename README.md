@@ -34,3 +34,9 @@ My basic working example setup before placing in project junction box is picture
 ### Notes:
 * You potentially can use a better mosfet with lower threshold - there are alot of options available although many of them have fairly high drive - so bigger gates with higher gate capacitance - which means you should connect a resistor in series between the gpio and the gate of the fet.
 * Note that the UART RX and TX are inverted from how a TTL UART normally is operated because of the logic level shift from the mosfets.
+
+## Other Observations
+### ESP8266
+Can an ESP8266 be used?  Answer: No (at least without major difficulty).
+* The hardware UART won't support the 104 baud rate [src](https://docs.espressif.com/projects/esp-faq/en/latest/software-framework/peripherals/uart.html#what-is-the-serial-port-baud-rate-range-of-esp8266)
+* The ESPHOME software UART stops interrupts on transmit so the loopback read happening at the same time will not be seen.
