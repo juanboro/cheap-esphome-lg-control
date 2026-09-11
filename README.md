@@ -47,7 +47,7 @@ My basic working example setup before placing in project junction box is picture
 ## Other Notes and Observations
 ### LG mini-split units and CN-REMO socket
 * *always* switch off the electric supply to your unit before attempting to access the plug.
-* With any luck - CN_REMO is easy to access.  On my dual inverter wall unit - all that is necessary is removing the tabbed bottom panel (no screws).  There is a 3 pin green extender connector already coming out of the control box ([image](doc/images/cn_remo_dual_inverter_unit.jpeg)).  It is easier to see/find if you remove the top cover (I removed the cover since I could not find it originally) - but that turned out to be unecessary.
+* With any luck - CN_REMO is easy to access.  On my dual inverter wall unit - all that is necessary is [removing](https://www.youtube.com/watch?v=Yl4yhYUb_Fg&t=20s) the tabbed bottom panel (no screws).  There is a 3 pin green extender connector already coming out of the control box ([image](doc/images/cn_remo_dual_inverter_unit.jpeg)).  It is easier to see/find if you remove the top cover (I removed it since I could not find it originally) - but that turned out to be unecessary.
 * My floor wall unit was a little less easy.  It required removing the the controller unit and cover from the controller unit to directly access the PCB and manually add an extension cable from the CN_REMO socket on the control board ([image](doc/images/cn_remo_on_board.jpg)).
 
 ### ESP8266 and LG controller
