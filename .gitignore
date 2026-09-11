@@ -1,0 +1,4 @@
+.DS_Store
+/.esphome/
+/secrets.yaml
+.vscode/settings.js
