@@ -1,0 +1,172 @@
+esphome:
+  name: esp32c6-example
+  friendly_name: ESP32C6 dev board LG example
+
+esp32:
+  board: esp32-c6-devkitc-1
+  flash_size: 4MB
+  framework:
+    type: esp-idf
+
+wifi:
+  ssid: !secret wifi_name
+  password: !secret wifi_pass
+  fast_connect: true
+  on_connect:
+    - switch.turn_on: blueled_switch
+  on_disconnect:
+    - switch.turn_off: blueled_switch
+  ap:
+    ssid: "Livingroom LG Fallback Hotspot"
+    password: !secret wifi_pass
+
+ota:
+  platform: esphome
+  # make the color orange when updating
+  on_begin:
+    - light.turn_on:
+        id: ledstatus
+        red: 100%
+        green: 50%
+        blue: 0%
+
+captive_portal:
+
+logger:
+  level: INFO
+#  level: DEBUG
+#  level: VERBOSE
+#  level: VERY_VERBOSE
+
+# adjust pins as necessary
+substitutions: 
+  tx_pin: 16
+  rx_pin: 17
+
+packages: 
+  lgcontroller:
+    url: https://github.com/juanboro/cheap-esphome-lg-control
+    ref: main
+    files:
+      - path: esphome/lg_controller.yaml
+        vars: { rx_pin: $rx_pin, rx_inverted: true, uart_id: ac_serial }
+
+uart:
+  id: ac_serial
+  tx_pin: { number: $tx_pin , inverted: true }
+  rx_pin: { number: $rx_pin , allow_other_uses: true, inverted: true , mode: { input: true, pullup: true} }
+  baud_rate: 104
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Set the status LED color and brightness based on state of the controller
+climate:
+  - id: !extend lg_control
+    name: "Living Room LG controller"
+    outdoor:
+      name: Outdoor Unit
+      id: outdoor
+      icon: mdi:fan
+      on_state:
+        - if:
+            condition:
+              binary_sensor.is_on: outdoor
+            then:
+              - light.turn_on:
+                  id: ledstatus
+                  brightness: 100%
+            else:
+              - light.turn_on:
+                  id: ledstatus
+                  brightness: 25%    
+    on_state:
+      - if:
+          condition:
+            lambda: 'return id(lg_control).mode == climate::CLIMATE_MODE_HEAT;'
+          then:
+            - light.turn_on:
+                id: ledstatus
+                red: 100%
+                green: 0%
+                blue: 0%
+      - if:
+          condition:
+            lambda: 'return id(lg_control).mode == climate::CLIMATE_MODE_COOL;'
+          then:
+            - light.turn_on:
+                id: ledstatus
+                red: 0%
+                green: 0%
+                blue: 100%
+      - if:
+          condition:
+            lambda: 'return id(lg_control).mode == climate::CLIMATE_MODE_FAN_ONLY;'
+          then:
+            - light.turn_on:
+                id: ledstatus
+                red: 100%
+                green: 100%
+                blue: 100%
+      - if:
+          condition:
+            lambda: 'return id(lg_control).mode == climate::CLIMATE_MODE_DRY;'
+          then:
+            - light.turn_on:
+                id: ledstatus
+                red: 100%
+                green: 100%
+                blue: 0%
+      - if:
+          condition:
+            lambda: 'return id(lg_control).mode == climate::CLIMATE_MODE_OFF;'
+          then:
+            - light.turn_on:
+                id: ledstatus
+                red: 0%
+                green: 20%
+                blue: 0%
+      - if:
+          condition:
+            binary_sensor.is_on: outdoor
+          then:
+            - light.turn_on:
+                id: ledstatus
+                brightness: 100%
+          else:
+            - light.turn_on:
+                id: ledstatus
+                brightness: 25%    
+
+web_server:
+  port: 80
+  version: 3
+
+api:
+#  encryption:
+#    key: !secret api_key
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: ledstatus
+    name: Status LED
+    pin: GPIO8
+    rgb_order: GRB
+    num_leds: 1
+    chipset: ws2812
+
+switch:
+  - platform: gpio
+    id: blueled_switch
+    pin: GPIO15
+    restore_mode: ALWAYS_OFF
+
+sensor:
+  - platform: uptime
+    type: timestamp
+    name: Last Boot
+    
+button:  
+  - platform: restart
+    name: "ESP32C6 Restart"

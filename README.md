@@ -34,6 +34,7 @@ My basic working example setup before placing in project junction box is picture
 ### Notes:
 * You potentially can use a better logic level mosfet with lower threshold voltage.  For non-SMT - there are some options available although many of them have fairly high drive - so much bigger gates with higher gate capacitance - which means you should connect a resistor in series between the gpio and the gate of the fet.  [IRLZ34](https://www.vishay.com/en/product/91327/) works quite well with a 1k resistor in series to the gate.
 * For this setup with ESPHome - the ESP32 UART RX and TX are inverted from how a TTL UART normally is operated because of the logic level shift from the mosfets.
+* Example of my working config including with color LED status light: [esp32c6_example_lvlshift.yaml](esphome/esp32c6_example_lvlshift.yaml)
 
 ### Suggested BOM
 * Perfboard and solder
@@ -47,8 +48,11 @@ My basic working example setup before placing in project junction box is picture
 ## Other Notes and Observations
 ### LG mini-split units and CN-REMO socket
 * *always* switch off the electric supply to your unit before attempting to access the plug.
-* With any luck - CN_REMO is easy to access.  On my dual inverter wall unit - all that is necessary is [removing](https://www.youtube.com/watch?v=Yl4yhYUb_Fg&t=20s) the tabbed bottom panel (no screws).  There is a 3 pin green extender connector already coming out of the control box ([image](doc/images/cn_remo_dual_inverter_unit.jpeg)).  It is easier to see/find if you remove the top cover (I removed it since I could not find it originally) - but that turned out to be unecessary.
-* My floor wall unit was a little less easy.  It required removing the the controller unit and cover from the controller unit to directly access the PCB and manually add an extension cable from the CN_REMO socket on the control board ([image](doc/images/cn_remo_on_board.jpg)).
+* With any luck - CN_REMO is easy to access.  On my dual inverter wall unit - all that is necessary is [removing](https://www.youtube.com/watch?v=Yl4yhYUb_Fg&t=20s) the tabbed bottom panel (no screws).  There is a 3 pin green extender connector already coming out of the control box.
+ ![cn_remove_dual_inverter](doc/images/cn_remo_dual_inverter_unit.jpeg)
+ It is easier to see/find if you remove the top cover.  If you have small fingers and are coordinated - you might not need to remove the top - after doing multiple units - I'd recommend removing the top.
+* My floor wall unit was a little less easy.  It required removing the the control unit and cover from the control unit to directly access the PCB and manually add an extension cable from the CN_REMO socket on the control board.
+![cn_remo_board](doc/images/cn_remo_on_board.jpg)
 
 ### ESP8266 and LG controller
 Can an ESP8266 be used?  Answer: No (at least without major difficulty).
