@@ -28,7 +28,12 @@ My basic working example setup before placing in project junction box is picture
 * I have tested this with my LG dual inverter unit directly and it works.  I also have tested it with the LIN-Transceiver as documented [here](doc/Low_baud_linxcvr_workaround.md).
 * To use with ESPHome - you should be able to just customize the following yaml file: [esp32_example_uart_lvlshift_lg.yaml](esphome/esp32_example_uart_lvlshift_lg.yaml)
 * Here is the schematic:
-![Schematic](doc/images/lg_uart_interface.svg)<img src="doc/images/LG%20PCB%20Board.jpeg" alt="PCB" width=25%>
+<table>
+  <tr>
+    <td valign="top"><img src="doc/images/lg_uart_interface.svg" alt="Schematic" width="450"></td>
+    <td valign="top"><img src="doc/images/LG%20PCB%20Board.jpeg" alt="PCB" width="125"></td>
+  </tr>
+</table>
 
 ### Notes:
 * You potentially can use a better logic level mosfet with lower threshold voltage.  For non-SMT - there are some options available although many of them have fairly high drive - so much bigger gates with higher gate capacitance - which means you should connect a resistor in series between the gpio and the gate of the fet.  [IRLZ34](https://www.vishay.com/en/product/91327/) works quite well with a 1k resistor in series to the gate.
