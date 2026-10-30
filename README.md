@@ -36,6 +36,7 @@ My basic working example setup before placing in project junction box is picture
 </table>
 
 ### Notes:
+* Caution: If you are uploading code to the ESP-32 board via the on board USB - do not attach the LG-controller at the same time via the TSR regulator.
 * You potentially can use a better logic level mosfet with lower threshold voltage.  For non-SMT - there are some options available although many of them have fairly high drive - so much bigger gates with higher gate capacitance - which means you should connect a resistor in series between the gpio and the gate of the fet.  [IRLZ34](https://www.vishay.com/en/product/91327/) works quite well with a 1k resistor in series to the gate.
 * For this setup with ESPHome - the ESP32 UART RX and TX are inverted from how a TTL UART normally is operated because of the logic level shift from the mosfets.
 * Example of my working config including with color LED status light: [esp32c6_example_lvlshift.yaml](esphome/esp32c6_example_lvlshift.yaml)
