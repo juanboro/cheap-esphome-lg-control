@@ -44,9 +44,9 @@ My basic working example setup before placing in project junction box is picture
 ### Suggested BOM
 * Perfboard and solder
 * Microcontroller: ESP32C6 super mini dev board
-* Voltage Regulator: Traco TSR1-2433 or similar fully integrated regulator
+* Voltage Regulator: Traco (TSR1-2433)[https://www.tracopower.com/sites/default/files/products/datasheets/tsr1_datasheet.pdf?t=1793318401] or similar fully integrated regulator - pin1 (Vin) has the dot on it.
 * 1 10k resistor
-* 2 2N7000 mosfets
+* 2 [2N7000](https://ww1.microchip.com/downloads/en/DeviceDoc/2N7000-N-Channel-Enhancement-Mode-Vertical-DMOS-FET-Data-Sheet-20005695A.pdf) mosfets - pin1=source=ground
 * 1 3-pin screw terminal
 * 1 3-pin female JST-XH connector
 
